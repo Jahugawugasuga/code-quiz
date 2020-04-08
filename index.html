@@ -4,13 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding Quiz</title>
+    <link rel="stylesheet" href="style.css">
     <!-- <link href="./style.css" rel="stylesheet"> -->
 </head>
 <body>
     <h1 class="time"></h1>
-    <div id="codequiz"></div>
+    <h2 id = "welcome"> 
+        Welcome to Your Coding Quiz, Points are given for correct answers, 
+        time is removed for wrong answers.
+    </h2>
+    <div id="codequiz">
+        <h2 id = "question"> </h2>
+        <button class = "answer" id = "ans1" onclick="handleClick()"></button>
+        <button class = "answer" id = "ans2" onclick="handleClick()"></button>
+        <button class = "answer" id = "ans3" onclick="handleClick()"></button>
+        <button class = "answer" id = "ans4" onclick="handleClick()"></button>
+    </div>
     <button id="submit">Submit Quiz</button>
-    <div id="results"></div>
+    <div id="results">
+        <form action="" method="get" class="form-example">
+            <div class="form">
+              <label for="Initials">Enter your Initials: </label>
+              <input type="initials" name="initials" id="initials" required>
+            </div>
+            <!-- <div class="form-example">
+               <button id="submitInitials">Submit Initials</button>
+            </div> -->
+          </form>
+    </div>
 
     <script src="./quiz.js"></script>
 </body>
@@ -18,20 +39,8 @@
 
 <!-- GIVEN I am taking a code quiz
 WHEN I click the start button
-I need a page with a start button
-i need to make the answers into buttons
-I need a new question to pop up with 4 options
-i need it store the answers to tally the score at the end
-Depending on  
-I need a countdown timer on each page that decreases time on missed answers
-I need to be able to save my final score to the webpage storage 
-I need feedback if the wrong answer is chosen
-I need feedback if the right answer is chosen 
-I need enough questions to ask for duration of one minute (10 questions - 6 seconds/question)
-final page will have a form to enter initials to SAVE highscore - buttons to clear HS or save HS
-final page will display highscores
-THEN a timer starts and I am presented with a question
-WHEN I answer a question
+THEN a timer starts and I am presented with a question DONE
+WHEN I answer a question NOT DONE
 THEN I am presented with another question
 WHEN I answer a question incorrectly
 THEN time is subtracted from the clock
