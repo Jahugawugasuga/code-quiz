@@ -1,0 +1,19 @@
+/* create button class */
+
+#userInitials {
+    display: none;
+    color: blue;
+    
+}
+
+#results {
+    display: none;
+} 
+
+#ans1, #ans2, #ans3, #ans4 {
+    display: none;
+}
+
+/* #highScores {
+    display: none;
+} */

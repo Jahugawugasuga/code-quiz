@@ -1,121 +1,115 @@
-//get the points working
-//submit form to show
-//when click submit after initials - send points and initials to local storage, also retrieve
-//make a key value pair for initials and score
+var quizContainer = document.getElementById("codequiz"); //use to display/hide quiz questions
+var welcomeTag = document.getElementById("welcome"); // use to display/hide welcome to quiz message
+var questionId = document.getElementById("question"); // use to dispaly/hide quiz questions
+var answer = document.querySelector(".answer"); // use to display/hide answers
+var timeElement = document.querySelector(".time"); // use to display or hide timer
+var initials = document.getElementById("userInitials") // use to display or hide userInitials
+var finalInitials = document.getElementById("finalInitials"); // use to display or hide finalInitials
+var startBtn = document.getElementById("starter"); // use to display or hide Start Button
+var scoreFinal = document.getElementById("scoreFinal"); // use to display or hide user score
+var highScores = document.getElementById("highScores"); // use to display or hide high scores 
+var resultsDiv = document.getElementById("results"); // use to display or high scores container
+var points = 0; // user points
+var submitBtn = document.getElementById("submitButton"); // use to display or hide submit button
+var counter = 0 // used to cycle through questions 0-9
+var ans1 = document.getElementById("ans1");
+var ans2 = document.getElementById("ans2");
+var ans3 = document.getElementById("ans3");
+var ans4 = document.getElementById("ans4");
 
-
-// var userInitials = document.getElementById ("username");
-var quizContainer = document.getElementById("codequiz");
-var welcomeTag = document.getElementById("welcome");
-var questionId = document.getElementById("question");
-var answer1Id = document.getElementById("ans1");
-var answer2Id = document.getElementById("ans2");
-var answer3Id = document.getElementById("ans3");
-var answer4Id = document.getElementById("ans4");
-// let resultsContainer =document.getElementById("results")
-var submitButton =document.getElementById("submit");
-var timeElement= document.querySelector(".time");
-var mostRecentScore = localStorage.getItem("mostRecentScore")
-var points = 0;
-var resultsBtn = document.getElementById("results");
-resultsBtn.style.display="none";
-var i = 0;
-var finalPoints = ""
-
-//start button functionality - used to start the quiz on click this works
-var startBtn = document.createElement("button");
-startBtn.innerHTML = "Start"
-document.body.appendChild(startBtn);
-startBtn.addEventListener("click",startQuiz); //first parameter is event, then second is function
-
+ans1.addEventListener("click", function () {
+    buttonChecker(ans1);
+});
+ans2.addEventListener("click", function () {
+    buttonChecker(ans2);
+});
+ans3.addEventListener("click", function () {
+    buttonChecker(ans3);
+});
+ans4.addEventListener("click", function () {
+    buttonChecker(ans4);
+});
 
 //timer function - run once the quiz begins, clears info and displays submit button when times out
-var countDown = 3;
+var countDown = 10;
 
-function setTime() { //this works
-    let timerInterval = setInterval (function(){ //why does function work and not a named function? 
-        countDown--; //timer decrements by 1 
-        timeElement.textContent = countDown + " seconds remaining in quiz";
-        answer1Id.style.display = "block";
-        answer2Id.style.display = "block";
-        answer3Id.style.display = "block";
-        answer4Id.style.display = "block";
-        
+function beginTimer() {
+
+    var timerInterval = setInterval(function () {
+        countDown--; //variable holding time element decreases 1 second at a time
+        timeElement.textContent = countDown + " seconds remaining in quiz"; //displays time left in quiz 
+
+
         if (countDown <= 0) {
             clearInterval(timerInterval);
-            submitButton.setAttribute(onclick, finalPageDisplay);
-            resultsBtn.style.display="block";
-            submitButton.style.display = "block";
-            quizContainer.style.display= "none";
-            timeElement.style.display = "none";
-            finalPageDisplay();
-            
+            submitBtn.style.display = "inline-block"; //submit button will display
+            quizContainer.style.display = "none"; //no more quiz questions
+            timeElement.style.display = "none"; //no more timer
+            startBtn.style.display = "none"; //you cant see the start button
 
-            return 
-
+            resultsDiv.style.display = "block";
+            initials.style.display = "block";
 
         }
-    }, 1000); // 1 second delay after button is pushed
-
+    }, 1000);
 
 }
 
-//if user selects button with correct answer, needs to store that data, compare with 
+startBtn.addEventListener("click", renderQuestion1);
 
-let quizQuestions = [ // questions and answers to be shown to user stored as an array this works
+let quizQuestions = [
     {
         question: "In the following array [zebra, horse, giraffe, donkey], what is the tallest creature?",
         answers: [
-             "giraffe",  //needs to be a button with event listener, runs point function
-             "donkey", // answer.value of answers 
-             "zebra",
-             "horse"
+            "giraffe",
+            "donkey",
+            "zebra",
+            "horse",
         ],
         correctAnswer: "giraffe"
-     //put the same value of the answer was, use triple equals operator
-},
-{
-    question:"Where is the proper placement of a script tag?",
-    answers:[
-         "top after head tag",
-         "inline, whenever you need it",
-         "bottom after closing body tag",
-         "bottom before closing body tag"
-    ],
-    correctAnswer:"bottom before closing body tag"
-   
-},
 
-{
-    question: "What does CDN stand for?",
-    answers: [
-         "Content Data Net",
-        "Complex Data Network",
-        "Content Delivery Network",
-        "Complex Delivery Net"
-    ],
-    correctAnswer:"Content Delivery Network"
-      
+    },
+    {
+        question: "Where is the proper placement of a script tag?",
+        answers: [
+            "top after head tag",
+            "inline, whenever you need it",
+            "bottom after closing body tag",
+            "bottom before closing body tag"
+        ],
+        correctAnswer: "bottom before closing body tag"
+
+    },
+    {
+        question: "What does CDN stand for?",
+        answers: [
+            "Content Data Net",
+            "Complex Data Network",
+            "Content Delivery Network",
+            "Complex Delivery Net"
+        ],
+        correctAnswer: "Content Delivery Network"
+
     },
     {
         question: "What is the most correct syntax for a local CSS tag in the same folder as your html file?",
         answers: [
-             "<a href './style.css' abs= 'stylesheet' ",
-             "<style> './style.css' abs= 'stylesheet' ",
-             "<link> href='./style.css' rel='stylesheet' ",
-             "<link href='./style.css' rel='stylesheet' "
+            "<a href './style.css' abs= 'stylesheet' ",
+            "<style> './style.css' abs= 'stylesheet' ",
+            "<link> href='./style.css' rel='stylesheet' ",
+            "<link href='./style.css' rel='stylesheet' "
         ],
-        correctAnswer:"<link href='./style.css' rel='stylesheet' "
+        correctAnswer: "<link href='./style.css' rel='stylesheet' "
     },
     {
         question: "What is the airspeed velocity of an unladen swallow? ",
-        answers:[
+        answers: [
             "I don't know that",
             "What do you mean, an African or European swallow?",
             "In order to maintain airspeed velocity, a swallow must beat its wings 35 times every second",
             "Are you suggesting coconuts migrate?"
         ],
-        correctAnswer: "What do you mean, an African or European swallow?"  
+        correctAnswer: "What do you mean, an African or European swallow?"
     },
     {
         question: "What does DOM stand for?",
@@ -125,28 +119,28 @@ let quizQuestions = [ // questions and answers to be shown to user stored as an 
             "Don't Omit Me",
             "Document Object Model"
         ],
-        correctAnswer:"Document Object Model"
+        correctAnswer: "Document Object Model"
     },
     {
         question: "What is the correct order of margin,padding,border?",
         answers: [
-             "image,padding,border,margin",
-             "image,padding,margin,border",
-             "image,margin,padding,border",
-             "image,margin,border,padding"
+            "image,padding,border,margin",
+            "image,padding,margin,border",
+            "image,margin,padding,border",
+            "image,margin,border,padding"
         ],
-        correctAnswer:"image,padding,border,margin"
+        correctAnswer: "image,padding,border,margin"
     },
     {
         question: "What is the correct function to create a folder in terminal?",
         answers: [
-             "touch",
-             "folder",
-             "mkdlr",
-             "mkdir"
-            
+            "touch",
+            "folder",
+            "mkdlr",
+            "mkdir"
+
         ],
-        correctAnswer:"mkdir"
+        correctAnswer: "mkdir"
     },
     {
         question: "What is the rank of specificity, greatest to least?",
@@ -156,8 +150,8 @@ let quizQuestions = [ // questions and answers to be shown to user stored as an 
             "element tag,class,id",
             "id,class, element tag"
         ],
-        correctAnswer:"id,class, element tag"
-        
+        correctAnswer: "id,class, element tag"
+
     },
     {
         question: "What is the best way to write code? ",
@@ -167,230 +161,177 @@ let quizQuestions = [ // questions and answers to be shown to user stored as an 
             "as long as it works",
             "just as long as you can read it, that's the best"
         ],
-        correctAnswer:"wavy, well notated, descriptive labeling"
+        correctAnswer: "wavy, well notated, descriptive labeling"
     }
-    
+
 ];
+function addPoints() { //this adds points on right answers picked
+    points++;
+}
 
-//when the quiz begins, welcome to quiz phrase and start button are hidden, 
-//question 1 and answers displayed
-//then timer begins
+function renderQuestion1() {
+    beginTimer();
 
-function addPoints() { //this works
-    return ++points; //++ before varialbe will increment and then return
+    startBtn.style.display = "none"; //dont see the start button
+    welcomeTag.style.display = "none"; //welcome tag is gone
+    questionId.textContent = quizQuestions[0].question; //first question is rendered
+
+
+
+    for (var i = 0; i < 4; i++) {
+        var buttonEl = document.getElementById("ans" + (i + 1)); //creates 4 button elements for button id ans1, ans2, ans3, ans4
+        buttonEl.textContent = quizQuestions[0].answers[i]; //displays text content of answers on buttons
+        buttonEl.style.display = "block"; //displays buttons in block style to user
     }
+    console.log(buttonEl.innerHTML)
+    console.log(quizQuestions[0].correctAnswer)
+    if (buttonEl.innerHTML === quizQuestions[0].correctAnswer) {
+        rightAnswer();
+    } else {
+        wrongAnswer();
 
-
-function handleClick(){
-   nextQuestion();
-   rightAnswer();
+    }
 }
 
-function startQuiz (){ // this works
-    startBtn.style.display ="none";
-    welcomeTag.style.display= "none";
-    questionId.textContent = quizQuestions[0].question;
-    answer1Id.textContent = quizQuestions[0].answers[0];//right answer
-    answer2Id.textContent = quizQuestions[0].answers[1];
-    answer3Id.textContent = quizQuestions[0].answers[2];
-    answer4Id.textContent = quizQuestions[0].answers[3];
-    
-    answer1Id.addEventListener("click", rightAnswer())
-    setTime();
-   
+function nextQuestion() {
+    counterFunc();
+    questionId.textContent = quizQuestions[(counter)].question; //displays the question
+    for (var i = 0; i < 4; i++) {
+        if (counter <= 9) { //this will display the rest of the questions
+            var buttonEl = document.getElementById("ans" + (i + 1)); //  
+            buttonEl.textContent = quizQuestions[(counter)].answers[i]; //displays the text of button to be four choices
+            buttonEl.style.display = "block";
+
+        }
+
+
+    }
+}
+function buttonChecker(test) {
+    if (test.getAttribute("id") === "ans1") {
+        console.log("a", " is what I clicked") //this shows what I actually clicked
+        console.log(test.innerHTML + " got clicked")
+        // for (var i = 0; i < quizQuestions[(counter)].answers.length; i++) {
+        if (test.innerHTML === quizQuestions[(counter)].correctAnswer) {
+            rightAnswer();
+        } else {
+            wrongAnswer();
+
+        }
+
+    }
+    else if (test.getAttribute("id") === "ans2") {
+        console.log("b", " is what I clicked") //this shows what I actually clicked
+        console.log(test.innerHTML + " got clicked")
+        // for (var i = 0; i < quizQuestions[(counter)].answers.length; i++) {
+        if (test.innerHTML === quizQuestions[(counter)].correctAnswer) {
+            rightAnswer();
+        } else {
+            wrongAnswer();
+
+        }
+
+        // }
+    } else if (test.getAttribute("id") === "ans3") { //this works 
+        console.log("c", " is what I clicked") //this shows what I actually clicked
+        console.log(test.innerHTML + " got clicked") //this works
+        // for (var i = 0; i < quizQuestions[(counter)].answers.length; i++) {
+        if (test.innerHTML === quizQuestions[(counter)].correctAnswer) {
+            rightAnswer();
+        } else {
+            wrongAnswer();
+
+            // }
+        }
+    } else {
+        console.log("d", " is what I clicked") //this shows what I actually clicked
+        console.log(test.innerHTML + " got clicked")
+
+        // i need a way for d was clicked to check if that was the right answer 
+        // for (var i = 0; i < quizQuestions[(counter)].answers.length; i++) {
+        if (test.innerHTML === quizQuestions[(counter)].correctAnswer) {
+            rightAnswer();
+        } else {
+            wrongAnswer();
+
+            // }
+        }
+
+    }
+}
+// if right answer is picked, add points, else reduce time 
+function wrongAnswer() { //this works
+    // countDown--;
+}
+
+function rightAnswer() {
+    console.log(counter)
+    if (quizQuestions[(counter)].answers[0] === quizQuestions[(counter)].correctAnswer) {
+        document.getElementById("response").innerHTML = "Correct!";
+        addPoints();
+        console.log("correct decision")
+
+    } else { //response to user if wrong answer selected
+
+        document.getElementById("response").innerHTML = "Wrong!";
+        countDown--;
+        console.log("wrong decision")
+    };
+}
+
+function counterFunc() { //this is working
+    if (quizQuestions[(counter)] === quizQuestions[(9)]) { //this works perfectly
+        countDown = 0;
+    } else {
+        counter++;
+    }
 }
 
 
+submitBtn.addEventListener("click", function (event) {
+    event.preventDefault;
+    saveUserData();
+    displayInitials();
 
-function nextQuestion() { 
-    //if correct answer is selected, add 1 point 
-    // if wrong answer is selected, subtract 1 seconds 
-    //this displays the question and answers - this works 
-   questionId.textContent = quizQuestions[1].question;
-    answer1Id.textContent = quizQuestions[1].answers[0];
-    answer2Id.textContent = quizQuestions[1].answers[1];
-    answer3Id.textContent = quizQuestions[1].answers[2];
-    answer4Id.textContent = quizQuestions[1].answers[3];
-    
-    
-    answer4Id.addEventListener("click",rightAnswer())
- 
+})
 
-    //try querySelectorAll - select ids, separated by commas. cant get it to work
+function saveUserData() {
 
-    document.querySelector('#ans2').setAttribute( "onClick", "question2()" );
-    document.querySelector('#ans3').setAttribute( "onClick", "question2()" );
-    document.querySelector('#ans4').setAttribute( "onClick", "question2()" );
-    document.querySelector('#ans1').setAttribute( "onClick", "question2()" );
-}
-function question2 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[2].question;
-    answer1Id.textContent = quizQuestions[2].answers[0];
-    answer2Id.textContent = quizQuestions[2].answers[1];
-    answer3Id.textContent = quizQuestions[2].answers[2];
-    answer4Id.textContent = quizQuestions[2].answers[3]; 
-    
-    answer3Id.addEventListener("click",rightAnswer())
-    
-    document.querySelector('#ans2').setAttribute( "onClick", "question3()" );
-    document.querySelector('#ans3').setAttribute( "onClick", "question3()" );
-    document.querySelector('#ans4').setAttribute( "onClick", "question3()" );
-    document.querySelector('#ans1').setAttribute( "onClick", "question3()" );
-}
-function question3 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[3].question;
-    answer1Id.textContent = quizQuestions[3].answers[0];
-    answer2Id.textContent = quizQuestions[3].answers[1];
-    answer3Id.textContent = quizQuestions[3].answers[2];
-    answer4Id.textContent = quizQuestions[3].answers[3]; 
-    
-    answer4Id.addEventListener("click",rightAnswer())
-      
-            document.querySelector('#ans2').setAttribute( "onClick", "question4()" );
-            document.querySelector('#ans3').setAttribute( "onClick", "question4()" );
-            document.querySelector('#ans4').setAttribute( "onClick", "question4()" );
-            document.querySelector('#ans1').setAttribute( "onClick", "question4()" );
-}
-function question4 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[4].question;
-    answer1Id.textContent = quizQuestions[4].answers[0];
-    answer2Id.textContent = quizQuestions[4].answers[1];
-    answer3Id.textContent = quizQuestions[4].answers[2];
-    answer4Id.textContent = quizQuestions[4].answers[3]; 
-    answer2Id.addEventListener("click",rightAnswer())
-   
-            document.querySelector('#ans2').setAttribute( "onClick", "question5()" );
-            document.querySelector('#ans3').setAttribute( "onClick", "question5()" );
-            document.querySelector('#ans4').setAttribute( "onClick", "question5()" );
-            document.querySelector('#ans1').setAttribute( "onClick", "question5()" );
+    localStorage.setItem("points", JSON.stringify(points)); //this works
+    var userPoints = JSON.parse(localStorage.getItem("points")); //this works
+    scoreFinal.textContent = userPoints //this works
+    var userInitials = document.getElementById("userInitials").value; //this works
+    localStorage.setItem("initials", userInitials); //this works
+    var finalUserInitials = localStorage.getItem("initials"); //this works
+    finalInitials.textContent = finalUserInitials //this works 
 }
 
-function question5 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[5].question;
-    answer1Id.textContent = quizQuestions[5].answers[0];
-    answer2Id.textContent = quizQuestions[5].answers[1];
-    answer3Id.textContent = quizQuestions[5].answers[2];
-    answer4Id.textContent = quizQuestions[5].answers[3]; 
-    answer4Id.addEventListener("click",rightAnswer())
-   
-    document.querySelector('#ans2').setAttribute( "onClick", "question6()" );
-    document.querySelector('#ans3').setAttribute( "onClick", "question6()" );
-    document.querySelector('#ans4').setAttribute( "onClick", "question6()" );
-    document.querySelector('#ans1').setAttribute( "onClick", "question6()" );
-   
-}
-function question6 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[6].question;
-    answer1Id.textContent = quizQuestions[6].answers[0];
-    answer2Id.textContent = quizQuestions[6].answers[1];
-    answer3Id.textContent = quizQuestions[6].answers[2];
-    answer4Id.textContent = quizQuestions[6].answers[3]; 
-    answer1Id.addEventListener("click",rightAnswer())
- 
-    document.querySelector('#ans2').setAttribute( "onClick", "question7()" );
-    document.querySelector('#ans3').setAttribute( "onClick", "question7()" );
-    document.querySelector('#ans4').setAttribute( "onClick", "question7()" );
-    document.querySelector('#ans1').setAttribute( "onClick", "question7()" );
-}
-function question7 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[7].question;
-    answer1Id.textContent = quizQuestions[7].answers[0];
-    answer2Id.textContent = quizQuestions[7].answers[1];
-    answer3Id.textContent = quizQuestions[7].answers[2];
-    answer4Id.textContent = quizQuestions[7].answers[3]; 
-    answer4Id.addEventListener("click",rightAnswer())
+function displayInitials() {
+    highScores.style.display = "inline-block";
 
-    document.querySelector('#ans2').setAttribute( "onClick", "question8()" );
-    document.querySelector('#ans3').setAttribute( "onClick", "question8()" );
-    document.querySelector('#ans4').setAttribute( "onClick", "question8()" );
-    document.querySelector('#ans1').setAttribute( "onClick", "question8()" );
-}
-function question8 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[8].question;
-    answer1Id.textContent = quizQuestions[8].answers[0];
-    answer2Id.textContent = quizQuestions[8].answers[1];
-    answer3Id.textContent = quizQuestions[8].answers[2];
-    answer4Id.textContent = quizQuestions[8].answers[3]; 
-    answer4Id.addEventListener("click",rightAnswer())
- 
-    document.querySelector('#ans2').setAttribute( "onClick", "question9()" );
-    document.querySelector('#ans3').setAttribute( "onClick", "question9()" );
-    document.querySelector('#ans4').setAttribute( "onClick", "question9()" );
-    document.querySelector('#ans1').setAttribute( "onClick", "question9()" );
-    
-}
-
-function question9 (){
-    //whenever a button change the attributes of the button onclick
-    questionId.textContent = quizQuestions[9].question;
-    answer1Id.textContent = quizQuestions[9].answers[0];
-    answer2Id.textContent = quizQuestions[9].answers[1];
-    answer3Id.textContent = quizQuestions[9].answers[2];
-    answer4Id.textContent = quizQuestions[9].answers[3];
-
-    answer1Id.addEventListener("click",rightAnswer())
 
 }
-
-var index =0
-//if right answer is picked, add points, else reduce time 
-function rightAnswer(){
-
-    
-if (quizQuestions[index].correctAnswer===quizQuestions[index].answers[index]){
-    addPoints();
-    index++;
-console.log(points)
-
-} else {
-    countDown--;
-    index++;
-}
+function scoreBoard() {
+    //compares user points with points before 
 }
 
-//we need to set attribute of multiple elements HW assignment 
+/*
+get item will bring back an array
+||
+scores array = localstorage.getItem("scores array") || ("empty array")
+localstorage.setItem.("scoresarray", JSON.stringify(scoresarray)
+make initials and score into key value pair
+-
+will be empty on startup
+some var get item m
+how to get to the finish line
+conditional - does correct answer equal answer clicked?
+add points for right answers
+lose time for wrong answers
+add form for highscores DONE
+stop submit button from refreshing the page
+local storage is storing the initials DONE
+local storage needs to make a new key value pair for each entry
 
-// questions are being displayed, need to add points to it
-//correct answer object back into quiz questions array 
-//working with objects in quizQuestion array
-//compare text value of button clicked to value of correct answer
-//if its true then add ++
-//if its false then lose time --
 
-
-
-
-
-// this submit botton on click, will show results
-// submitButton.addEventListener("click", showResults);
-
-// function showResults(){}
-
-function finalPageDisplay () { //when this is displayed, then these elements will appear
-   resultsBtn.innerText = "HighScores";
-
-}
-    
-    
-
-//some form, input, where user puts in initials var userInitials = getelementbyId("input").value
-
-//localStorage.setItem(key,value ) storing objects vs strings 
-/*need a nextQuestionFunction - needs to clear current question and answers, 
-bring up next question and answers
-target innerText
-how to start the game target codequiz div and wrap around the button 
-
-need a for loop to go through questions and answers 
-nextQuestionFunction will be called when any answer is selected
-quiz will end when no time is remaining
-endQuiz text - thanks for playing enter initials - enter point amount in local storage 
-put points in localstorage - those points must be in an object form - strings only 
 */
