@@ -15,29 +15,24 @@
     </h2>
     <div id="codequiz">
         <h2 id = "question"> </h2>
- 
-        <button  id = "ans1" onclick="nextQuestion()"></button>
-        <button  id = "ans2" onclick="nextQuestion()"></button>
-        <button  id = "ans3" onclick="nextQuestion()"></button>
-        <button  id = "ans4" onclick="nextQuestion()"></button>
-
-    <p id = "response"></p>
+        <button class = "answer" id = "ans1" onclick="handleClick()"></button>
+        <button class = "answer" id = "ans2" onclick="handleClick()"></button>
+        <button class = "answer" id = "ans3" onclick="handleClick()"></button>
+        <button class = "answer" id = "ans4" onclick="handleClick()"></button>
     </div>
     
     <div id="results">
         <form method="get">    
+            <p id = "score"></p>
               <label for="Initials">Enter your Initials: </label>
-              <input type = "text" id = "userInitials" placeholder="Initials">
-              <button type = "button" id = "submitButton">SUBMIT</button>
-             
+              <input  type = "text" id = "userInitials" placeholder="frickin">
+              <input type = "submit" id = "submitButton" >
           </form>
-          <div id = "highScores">
-                <p id = "finalInitials"></p> <p id = "scoreFinal"></p>
-               <button type = "button" id = "restart">Restart Quiz</button><button type = "button" id = "clearScores">Clear High scores</button>
-               
-
+          <!-- <div id = "highScores">
+                <p id = "finalInitials"></p>
+                <p id = "scoreFinal"></p>
                 
-          </div>
+          </div> -->
     </div>
 
     <script src="./quiz.js"></script>
